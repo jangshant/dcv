@@ -12,8 +12,9 @@ RUN  rm -rf /var/lib/apt/lists/*
 RUN  mysql_install_db
 RUN service mysql stop
 #RUN sed -i "s|/var/run/mysqld/|/run/mysqld/|g" /etc/mysql/my.cnf
+#RUN cd /usr ; /usr/bin/mysqld_safe &
+RUN service mysql start
 RUN /usr/sbin/mysqld --defaults-file=/etc/mysql/my.cnf --basedir=/usr --datadir=/var/lib/mysql --pid-file=/run/mysqld/mysqld.pid --socket=/run/mysqld/mysqld.sock
-RUN cd /usr ; /usr/bin/mysqld_safe &
 RUN /usr/bin/mysqladmin -u root password 'password1' &&\
     mysql -u root -proot -e "DELETE FROM mysql.user WHERE User='';" &&\
     mysql -u root -proot -e "DELETE FROM mysql.user WHERE User='root' AND Host NOT IN ('localhost', '127.0.0.1');" &&\
